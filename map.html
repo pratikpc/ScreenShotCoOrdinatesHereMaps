@@ -1,0 +1,94 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Aerodrome</title>
+    <!-- Maps API -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.api.here.com/v3/3.0/mapsjs-ui.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://js.api.here.com/v3/3.0/mapsjs-core.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://js.api.here.com/v3/3.0/mapsjs-data.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://js.api.here.com/v3/3.0/mapsjs-service.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"
+    ></script>
+    <!-- Bootstrap core CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+      type="text/css"
+    />
+  </head>
+
+  <body id="page-top">
+    <div id="map">
+      <div
+        style="width: 100%; height: 100%; margin: auto"
+        id="mapContainer"
+      ></div>
+      <script type="text/javascript">
+        /**
+         * Boilerplate map initialization code starts below:
+         */
+
+        // Step 1: initialize communication with the platform
+        var platform = new H.service.Platform({
+          app_id: "iR8ykbifoBUlJW6RdfLr",
+          app_code: "s76E4-KlQ79tDPa4mH1Zwg",
+          useHTTPS: true
+        });
+        var defaultLayers = platform.createDefaultLayers();
+
+        // Step 2: initialize a map
+        // Please note, that default layer is set to satellite mode
+        var map = new H.Map(
+          document.getElementById("mapContainer"),
+          defaultLayers.satellite.map,
+          {
+            zoom: 1
+          }
+        );
+        // Create a group from our objects to easily zoom to them
+        var container = new H.map.Group();
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        var data = JSON.parse(urlParams.get("q"));
+        data.forEach(element => {
+          var lat = element[0];
+          var lng = element[1];
+          container.addObject(new H.map.Marker({ lat: lat, lng: lng }));
+        });
+
+        // Set the Map Bounds to the bounds given in the KML
+        map.setViewBounds(container.getBounds());
+
+        // Make objects visible by adding them to the map
+        map.addObject(container);
+      </script>
+    </div>
+  </body>
+</html>
