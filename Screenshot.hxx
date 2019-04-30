@@ -26,6 +26,10 @@ public:
     int Interval;
 
 private:
+    QTimer * const TimerCheckIfScreenshotPossible;
+    bool ViewAvailable;
+
+private:
     QSize PageDimensions() const
     {
         return View.page()->contentsSize().toSize();
@@ -48,9 +52,6 @@ private:
                || ColorWhite(Image.pixel(2,Image.height()-2))
                || ColorWhite(Image.pixel(Image.width()-2,Image.height()-2));
     }
-
-private:
-    QTimer * const TimerCheckIfScreenshotPossible;
 
 private slots:
     void TakeScreenShot()
@@ -82,6 +83,10 @@ private slots:
         TimerCheckIfScreenshotPossible->stop();
         // Close the View
         View.close();
+
+        // View is Closed
+        // Hence No Longer Available
+        ViewAvailable = false;
     }
 
 private slots:
@@ -101,8 +106,9 @@ public:
     Screenshot(QString const& Url, QString const& Destination)
         : Destination{Destination},
         Url{Url},
+        Interval{2000/*2 Seconds*/},
         TimerCheckIfScreenshotPossible{new QTimer(&View)},
-        Interval{2000/*2 Seconds*/}
+        ViewAvailable{true} /*By Default View is Available*/
     {
         View.setAttribute(Qt::WA_DontShowOnScreen);
         View.resize(800, 600);
@@ -119,6 +125,15 @@ public:
         View.setUrl(UrlWithData);
 
         View.connect(View.page(), SIGNAL(loadFinished(bool)), this, SLOT(LoadedTakeScreenShot(bool)));
+    }
+
+    ~Screenshot()
+    {
+        // As View is Available
+        // Termination was Premature
+        // Close Resources
+        if(ViewAvailable)
+            View.close();
     }
 };
 

@@ -10,6 +10,11 @@ the Path Specified by the user.
 
 The Points Covered are marked with Icons.
 
+As it stands, map.html which interfaces with Here Maps for us must be placed in
+The Present Working Directory.
+Note:-
+However, you can choose a separate path as well if you provide it in Constructor
+
 Sample ScreenShot and Position Values are Provided here.
 
 # TODO
